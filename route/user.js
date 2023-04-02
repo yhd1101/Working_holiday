@@ -1,6 +1,10 @@
 import express from "express";
 import userModel from "../models/user.js";
 import jwt from "jsonwebtoken"
+import passport from "passport";
+import profile from "../models/profile.js";
+import profileModel from "../models/profile.js";
+const authCheck = passport.authenticate("jwt", { session : false }) //auto
 
 
 const router = express.Router()
@@ -74,6 +78,21 @@ router.post("/login", async (req, res) => {
             msg : err
         })
     }
+})
+
+//user 정보 가져오기
+router.get("/", authCheck, async (req, res) => {
+
+    const { name, email, password } = req.user
+    const profile = await profileModel.findOne({ user : req.user._id}) //프로필 정보 가져오기
+    res.json({
+        msg : "Successful get userInfo",
+        user : {
+            name, email, password
+        },
+        profile
+    })
+
 })
 
 export default router

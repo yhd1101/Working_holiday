@@ -38,7 +38,7 @@ userSchema.pre("save", async function (next) { //저장하기 직전 실행되�
       if (!this.isModified("password") || !this.isModified("prfileImage")) { //패스워드 변경, 프로필변경
           next() //나가다
       }
-      
+
       //프로필이미지 자동생성
       const avatar = await gravatar.url(
           this.email,
