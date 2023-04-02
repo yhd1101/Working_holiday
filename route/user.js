@@ -95,4 +95,38 @@ router.get("/", authCheck, async (req, res) => {
 
 })
 
+//패스워드 변경(로그인 전단계) - 사용자가 이메일을 넣으면 해당되는 이메일로 비밀번호 변경 로직 전송
+router.post("/find/password", async (req, res) => {
+    const { email } = req.body
+
+    const user = await userModel.findOne({ email })
+    if (!user) {
+        return res.status(404).json({
+            msg : "No user"
+        })
+    }
+    //이메일 전송
+
+})
+
+
+//패스워드 변경(로그인 후단계)
+
+
+//이메일 찾기
+router.post("/find/email", async (req, res) => {
+    const { phone } = req.body
+    const result = await profileModel.findOne({ phone })
+    const user = await userModel.findById(result.user)
+    res.json({
+        msg : "Successful your email",
+        info : user.email
+    })
+
+})
+
+
+//회원탈퇴
+
+//username 변경
 export default router

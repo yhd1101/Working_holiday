@@ -29,5 +29,8 @@ router.post("/create", checkAuth, async (req, res) => {
     }
 })
 
+//프로필정보 변경
+
+//프로필 삭제
 
 export default router
