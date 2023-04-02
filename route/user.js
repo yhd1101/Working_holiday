@@ -1,7 +1,7 @@
 import express from "express";
 import userModel from "../models/user.js";
 import jwt from "jsonwebtoken"
-import bcrypt from "bcrypt"
+
 
 const router = express.Router()
 
@@ -9,7 +9,7 @@ router.post("/signup", async (req ,res) => {
     const { name, email, password } = req.body
 
     try{
-        //id 유무체크
+        //email 유무체크
         const user = await userModel.findOne({email})
 
         if(user){
@@ -18,10 +18,10 @@ router.post("/signup", async (req ,res) => {
             })
         }
         //password 암호화
-        const hashedPassword = await bcrypt.hash(password, 10) //10자리까지 암호화
+        // const hashedPassword = await bcrypt.hash(password, 10) //10자리까지 암호화
         const newUser = new userModel({
-            name, email,
-            password : hashedPassword
+            name, email, password
+            // password : hashedPassword
         })
 
         const result = await newUser.save()
@@ -49,9 +49,9 @@ router.post("/login", async (req, res) => {
                 msg : "No userEmail"
             })
         }
-
-        const hashedPassword = await bcrypt.compare(password, user.password) //compare 매칭
-        if (hashedPassword === false){
+        //패스워드 해쉬 비교
+        const isMatched = await user.matchPassword(password)
+        if (!isMatched) {
             return res.json({
                 msg : "password do not match"
             })
