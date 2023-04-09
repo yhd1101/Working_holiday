@@ -10,7 +10,7 @@ const authCheck = passport.authenticate("jwt", { session : false }) //auto
 const router = express.Router()
 
 router.post("/signup", async (req ,res) => {
-    const { name, email, password } = req.body
+    const { name, email, password, phone } = req.body
 
     try{
         //email 유무체크
@@ -42,9 +42,7 @@ router.post("/signup", async (req ,res) => {
 })
 
 router.post("/login", async (req, res) => {
-
     const { email, password } =req.body
-
     try{
         //id 유무체크
         const user = await userModel.findOne({ email })
@@ -60,9 +58,7 @@ router.post("/login", async (req, res) => {
                 msg : "password do not match"
             })
         }
-
         //jsonwebtoken 생성
-
         const token = await jwt.sign(
             {id : user._id},
             process.env.SECRET_KEY,
@@ -72,13 +68,13 @@ router.post("/login", async (req, res) => {
             msg : "Successful login",
             token : token
         })
-
     }catch (err){
         res.status(500).json({
             msg : err
         })
     }
 })
+
 
 //user 정보 가져오기
 router.get("/", authCheck, async (req, res) => {
@@ -127,6 +123,7 @@ router.post("/find/email", async (req, res) => {
 
 
 //회원탈퇴
+
 
 //username 변경
 export default router

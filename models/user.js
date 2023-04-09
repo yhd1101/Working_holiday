@@ -5,7 +5,7 @@ import gravatar from "gravatar"
 const userSchema = mongoose.Schema(
     {
         // 이름, 생년월일 , 성별, 아이디, 패스워드 ,이메일 , 핸드폰번호
-        //로그인 : 아이디 ,패스워드
+        //로그인 : 이메일 ,패스워드
         name : {
             type : String,
             required : true
@@ -35,9 +35,6 @@ const userSchema = mongoose.Schema(
 
 userSchema.pre("save", async function (next) { //저장하기 직전 실행되는 함수
   try {
-      if (!this.isModified("password") || !this.isModified("prfileImage")) { //패스워드 변경, 프로필변경
-          next() //나가다
-      }
 
       //프로필이미지 자동생성
       const avatar = await gravatar.url(
